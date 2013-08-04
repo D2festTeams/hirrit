@@ -14,6 +14,11 @@
     <!-- Custom styles for this template -->
     <link href="http://getbootstrap.com/assets/css/docs.css" rel="stylesheet">
     <link href="http://getbootstrap.com/assets/css/pygments-manni.css" rel="stylesheet">
+
+    <!-- Javascript -->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
   </head>
 
   <body>
@@ -29,7 +34,7 @@
         <div class="nav-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
-            <li><a href="tree.html">Tree</a></li>
+            <li><a href="/tree.html">Tree</a></li>
             <li><a href="#contact">Contact</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
@@ -55,33 +60,35 @@
 
     <div class="container">
 
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-      </div>
-
-      <div class="body-content">
+      <div class="body-content" ng-app>
 
         <!-- Example row of columns -->
-        <div class="row">
-          <div class="col-lg-4">
-            <h2>Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+        <div class="row" ng-controller="treeCtrl">
+          <hr>
+          <div class="col-lg-12 col-lg-8">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="repo" class="col-lg-2 control-label">Github</label>
+                <div class="col-lg-4">
+                  <input type="text" class="form-control" id="owner" placeholder="Username" />
+                </div>
+                <div class="col-lg-4">
+                  <input type="text" class="form-control" id="repo" placeholder="Repository" />
+                </div>
+                <div class="col-lg-2">
+                  <button class="btn btn-primary" ng-click="search()">search</button>
+                </div>
+              </div>
+
+            </form>
+            <table class="table">
+              <tr ng-repeat="tree in trees">
+                <td><a ng-click="go(tree)">{{tree.path}}</a></td>
+              </tr>
+            </table>
           </div>
-          <div class="col-lg-4">
-            <h2>Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
-         </div>
-          <div class="col-lg-4">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+          <div class="col-lg-6 col-lg-4">
           </div>
-        </div>
 
         <hr>
 
@@ -91,6 +98,24 @@
       </div>
 
     </div> <!-- /container -->
-	
+	  <script type="text/javascript">
+      function treeCtrl($scope, $http) {
+        if ($('#owner').val() == "") $('#owner').val('daclouds');
+        if ($('#repo').val() == "") $('#repo').val('Spring-Examples');
+
+        $scope.search = function() {
+          console.log('search');
+          $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/trees/689daf506ed2d648c97cbea03e0b9aee14e555da').success(function(data) {
+            $scope.trees = data.tree;
+          });  
+        }
+
+        $scope.go = function(tree) {
+          $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/trees/' + tree.sha).success(function(data) {
+            $scope.trees = data.tree;
+          });          
+        }
+      }
+    </script>
   </body>
 </html>
