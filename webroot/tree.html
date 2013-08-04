@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>D2fet</title>
+    <title>hirrit :: D2Fest</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.css" rel="stylesheet">
@@ -19,6 +19,8 @@
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?skin=sunburst"></script>
   </head>
 
   <body>
@@ -82,10 +84,14 @@
 
             </form>
             <table class="table">
+              <tr class="hide" id="parent">
+                <td><a ng-click="go('parent')">..</a></td>
+              </tr>
               <tr ng-repeat="tree in trees">
                 <td><a ng-click="go(tree)">{{tree.path}}</a></td>
               </tr>
             </table>
+            <pre class="prettyprint" style="width: 100%;"><code id="content"></code></pre>
           </div>
           <div class="col-lg-6 col-lg-4">
           </div>
@@ -104,16 +110,40 @@
         if ($('#repo').val() == "") $('#repo').val('Spring-Examples');
 
         $scope.search = function() {
-          console.log('search');
-          $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/trees/689daf506ed2d648c97cbea03e0b9aee14e555da').success(function(data) {
-            $scope.trees = data.tree;
-          });  
+          $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/refs').success(function(data) {
+            $.each(data, function(idx, e) {
+              if (e.ref == 'refs/heads/master') {
+                $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/trees/' + e.object.sha).success(function(data) {
+                  $scope.trees = data.tree;
+                });  
+              }
+            });
+          });
         }
 
+        $scope.parent = {};
+
         $scope.go = function(tree) {
-          $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/trees/' + tree.sha).success(function(data) {
-            $scope.trees = data.tree;
-          });          
+          if (tree == 'parent') {
+            $scope.trees = $scope.parent;
+          } else if (tree.type == "blob") {
+            $http({
+              url: 'https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/blobs/' + tree.sha, 
+              method: 'GET', 
+              headers: {'Accept': 'application/vnd.github.VERSION.raw' }
+            }).success(function(data) {
+              $('#content').text(data);
+              $('#content').parent().removeClass("prettyprinted");
+              prettyPrint();
+            });
+          } else {
+            if ($scope.trees != undefined) $scope.parent = $scope.trees;
+            $http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/trees/' + tree.sha).success(function(data) {
+              $('#parent').removeClass('hide');
+              $scope.trees = data.tree;
+              $('#content').text('');
+            });
+          }         
         }
       }
     </script>
