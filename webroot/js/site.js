@@ -9,9 +9,9 @@ Site.config(function ($routeProvider) {
 
 function AppController ($scope, $rootScope, $http) {
 	// Load pages on startup
-	$http.get('pages.json').success(function (data) {
-		$rootScope.pages = data;
-	});
+	//$http.get('pages.json').success(function (data) {
+	//	$rootScope.pages = data;
+	//});
 
 	// Set the slug for menu active class
 	$scope.$on('routeLoaded', function (event, args) {
@@ -24,5 +24,5 @@ function RouteController ($scope, $rootScope, $routeParams) {
 	var slug = $routeParams.slug;
 	
 	$scope.$emit('routeLoaded', {slug: slug});
-	$scope.page = $rootScope.pages[slug];
+	//$scope.page = $rootScope.pages[slug];
 }
