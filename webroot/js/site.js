@@ -2,7 +2,6 @@ var Site = angular.module('Site', []);
 
 Site.config(function ($routeProvider) {
 	$routeProvider
-	//.when('/:slug', {templateUrl: 'main.html', controller: 'RouteController'})
 	.when('/main', {templateUrl: 'main.html', controller: 'RouteController'})
 	.when('/tree', {templateUrl: 'tree.html', controller: 'RouteController'})
 	.otherwise({redirectTo: '/main'});
@@ -10,9 +9,9 @@ Site.config(function ($routeProvider) {
 
 function AppController ($scope, $rootScope, $http) {
 	// Load pages on startup
-	//$http.get('pages.json').success(function (data) {
-	//	$rootScope.pages = data;
-	//});
+	$http.get('pages.json').success(function (data) {
+		$rootScope.pages = data;
+	});
 
 	// Set the slug for menu active class
 	$scope.$on('routeLoaded', function (event, args) {
