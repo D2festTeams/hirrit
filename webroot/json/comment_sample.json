@@ -1,7 +1,7 @@
 [{
 	"id": "",
-	"path": "",
-	"source_id": "",
+	"path": "pom.xml",
+	"source_id": "4b91b00f0622e4c17e35b0b81a35d07b86abec04",
 	"priority": "",
 	"comment": "대다나다",
 	"start_line": 6,
@@ -11,8 +11,8 @@
 	"last_updated": ""
 },{
 	"id": "",
-	"path": "",
-	"source_id": "",
+	"path": "pom.xml",
+	"source_id": "4b91b00f0622e4c17e35b0b81a35d07b86abec04",
 	"priority": "",
 	"comment": "조케따",
 	"start_line": 6,

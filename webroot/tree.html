@@ -17,7 +17,11 @@
 					</div>
 				</div>
 			</form>
-	
+			
+			<ol class="breadcrumb" ng-model="comments">
+				<li ng-repeat="c in comments"><a ng-click="viewComment(c.end_line)">{{c.start_line}} - {{c.end_line}}</a></li>
+			</ol>
+			<div id="content" style="width: 100%;"></div>
 			<table class="table">
 				<tr class="hide" id="parent">
 					<td><a ng-click="go('parent')">..</a></td>
@@ -26,7 +30,6 @@
 					<td><a ng-click="go(tree)">{{tree.path}}</a></td>
 				</tr>
 			</table>
-			<div id="content" style="width: 100%;"></div>
 		</div>
 		<div class="col-lg-6 col-lg-4">
 		</div>

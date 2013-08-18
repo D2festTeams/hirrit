@@ -36,14 +36,18 @@ function treeCtrl($scope, $http) {
 				method: 'GET', 
 					headers: {'Accept': 'application/vnd.github.VERSION.raw' }
 				}).success(function(code) {
-				
+
 					$scope.comments = {};
 					$http({
 						url: '/json/comment_sample.json',
 						method: 'GET'
 					}).success(function(comments) {
 						$.each(comments, function(idx, comment) {
-							$scope.comments[comment.end_line] = comment;
+
+							if (tree.sha == comment.source_id) {
+								$scope.comments[comment.end_line] = comment;
+							}
+
 						});
 
 						$('#content').empty();
@@ -57,11 +61,11 @@ function treeCtrl($scope, $http) {
 						// 라인 넘버 추가
 						for (var i = 0, j = lines.length; i < j; i++) {
 							var line = lines[i];
-							source += (i+1) + "\t" + line + "\n";
+							source += line + "\n";
 						}
 
 						// review 와 code 를 구분
-						$(d).addClass('prettyprint');
+						$(d).addClass('prettyprint linenums');
 						$(d).text(source);
 						$(d).appendTo($('#content'));
 
@@ -91,7 +95,6 @@ function treeCtrl($scope, $http) {
 
 		// temp
 		var comment = $scope.comments[end_line];
-		console.log(comment);
 
 		var source = '';
 		var lines = $scope.lines;
