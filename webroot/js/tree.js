@@ -122,6 +122,7 @@ function treeCtrl($scope, $http) {
 
 				// 이전 내용을 저장
 				$(d).addClass('prettyprint');
+				$('.prettyprint').css({ margin: "0px" });
 				$(d).text(source);
 				$(d).appendTo($('#content'));
 
@@ -135,6 +136,7 @@ function treeCtrl($scope, $http) {
 
 				d = document.createElement('pre');
 				$(d).addClass('prettyprint');
+				$('.prettyprint').css({ margin: "0px" });
 				$(d).text(source);
 				$(d).appendTo($('#content'));
 
@@ -147,7 +149,7 @@ function treeCtrl($scope, $http) {
 				review += '</div>';	// end of panel
 				*/
 
-				var review = '<div class="fb-comments" data-href="http://daclouds.blog.me" data-width="470" style="width: 470px; margin-left: 80px;"></div>';
+				var review = '<div class="fb-comments" data-href="http://daclouds.blog.me" data-width="470" style="width: 470px; margin: 10px;"></div>';
 
 				$(d).html(review);
 				$(d).appendTo($('#content'));
@@ -163,12 +165,13 @@ function treeCtrl($scope, $http) {
 
 		// review 와 code 를 구분
 		$(d).addClass('prettyprint');
+		$('.prettyprint').css({ margin: "0px" });
 		$(d).text(source);
 		$(d).appendTo($('#content'));
 
 		// css 를 다시 적용
 		$('.prettyprint').removeClass("prettyprinted");
-		//$('.prettyprint').css({ margin: "20px" });
+		$('.prettyprint').css({ margin: "0px" });
 		prettyPrint();
 
 		FB.XFBML.parse();
