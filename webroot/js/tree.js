@@ -4,6 +4,10 @@ function treeCtrl($scope, $http) {
 
 	$scope.search = function() {
 
+		// 초기화
+		$('#content').empty();
+		$scope.comments = {};
+
 		// tree 목록을 조회한다.
 		$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/refs').success(function(data) {
 			$.each(data, function(idx, e) {
