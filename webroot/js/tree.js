@@ -1,3 +1,11 @@
+(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/ko_KR/all.js#xfbml=1&appId=146140765593896";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
 function treeCtrl($scope, $http) {
 	if ($('#owner').val() == "") $('#owner').val('d2festTeams');
 	if ($('#repo').val() == "") $('#repo').val('hirrit');
@@ -47,7 +55,6 @@ function treeCtrl($scope, $http) {
 						method: 'GET'
 					}).success(function(comments) {
 						$.each(comments, function(idx, comment) {
-
 							if (tree.sha == comment.source_id) {
 								$scope.comments[comment.end_line] = comment;
 							}
@@ -134,9 +141,14 @@ function treeCtrl($scope, $http) {
 				// review 내용 보기
 				d = document.createElement('div');
 
+				/*
 				var review = '<div class="panel" style="width: 90%; margin-left: 40px">';
 				review += comment.comment;
 				review += '</div>';	// end of panel
+				*/
+
+				var review = '<div class="fb-comments" data-href="http://daclouds.blog.me" data-width="470" style="width: 470px; margin-left: 80px;"></div>';
+
 				$(d).html(review);
 				$(d).appendTo($('#content'));
 
@@ -156,7 +168,9 @@ function treeCtrl($scope, $http) {
 
 		// css 를 다시 적용
 		$('.prettyprint').removeClass("prettyprinted");
-		$('.prettyprint').css({ margin: "0px" });
+		//$('.prettyprint').css({ margin: "20px" });
 		prettyPrint();
+
+		FB.XFBML.parse();
 	}
 }
