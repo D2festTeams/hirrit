@@ -3,7 +3,6 @@ import java.util.List;
 
 import model.Comment;
 
-
 public class DBSample {
 	
 	public static void main(String[] args) throws SQLException {
