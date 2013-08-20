@@ -1,0 +1,58 @@
+<div class="body-content" ng-app>
+	<!-- Example row of columns -->
+	<div class="row" ng-controller="commitCtrl">
+		<hr>
+		<div class="col-lg-12 col-lg-8">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="repo" class="col-lg-2 control-label">Github</label>
+					<div class="col-lg-4">
+						<input type="text" class="form-control" id="owner" placeholder="Username" />
+					</div>
+					<div class="col-lg-4">
+						<input type="text" class="form-control" id="repo" placeholder="Repository" />
+					</div>
+					<div class="col-lg-2">
+						<button class="btn btn-primary" ng-click="search()">search</button>
+					</div>
+				</div>
+			</form>
+			
+			<ul class="media-list">
+				<li class="media" ng-repeat="item in commits">
+					<a class="pull-left">
+						<img src="{{item.committer.avatar_url}}" class="img-rounded" alt="{{item.commiter.name}}" style="width:50px;height:50px;" />
+					</a>
+					<div class="media-body">
+						<h4 class="media-heading"><a href="go(item)">{{item.commit.message}}</a></h4>
+						<span class="label">{{item.name}}</span>
+						<span class="label">{{item.commit.committer.date|date:'yyyy/MM/dd'}}</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="col-lg-6 col-lg-4"></div>
+	</div> <!-- /container -->
+	
+	<script type="text/javascript">
+	function commitCtrl($scope, $http) {
+		if ($('#owner').val() == "") $('#owner').val('D2festTeams');
+		if ($('#repo').val() == "") $('#repo').val('hirrit');
+
+		$scope.search = function() {
+			$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/commits').success(function(data) {
+				$.each(data,function(i,o){
+					console.dir(o);
+					
+					o.name = o.committer ? o.committer.login : o.commit.author.name;
+				});
+				$scope.commits = data;
+			});
+		};
+		
+		$scope.go = function(item) {
+			
+		};
+	}
+	</script>
+</div>

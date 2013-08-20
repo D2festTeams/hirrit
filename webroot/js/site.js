@@ -4,6 +4,7 @@ Site.config(function ($routeProvider) {
 	$routeProvider
 	.when('/main', {templateUrl: 'main.html', controller: 'RouteController'})
 	.when('/tree', {templateUrl: 'tree.html', controller: 'RouteController'})
+	.when('/commit', {templateUrl: 'commit.html', controller: 'RouteController'})
 	.otherwise({redirectTo: '/main'});
 });
 
