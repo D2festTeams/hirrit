@@ -35,6 +35,10 @@
 	</div> <!-- /container -->
 	
 	<script type="text/javascript">
+	function logger (o) {
+		if(console) console.dir(o);
+	}
+	
 	function commitCtrl($scope, $http) {
 		if ($('#owner').val() == "") $('#owner').val('D2festTeams');
 		if ($('#repo').val() == "") $('#repo').val('hirrit');
@@ -42,7 +46,7 @@
 		$scope.search = function() {
 			$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/commits').success(function(data) {
 				$.each(data,function(i,o){
-					console.dir(o);
+					logger(o);
 					
 					o.name = o.committer ? o.committer.login : o.commit.author.name;
 				});
@@ -51,7 +55,7 @@
 		};
 		
 		$scope.go = function(item) {
-			
+			logger(item);
 		};
 	}
 	</script>
