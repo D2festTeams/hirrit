@@ -15,7 +15,7 @@ public class DBSample {
 		comment.setCommit_id(1234L);
 		comment.setPath("/ham/ham");
 		comment.setPriority(2);
-		comment.setComment("�۽꿰");
+		comment.setComment("코멘트.");
 		comment.setUp_cnt(1);
 		comment.setStart_line(2);
 		comment.setEnd_line(5);

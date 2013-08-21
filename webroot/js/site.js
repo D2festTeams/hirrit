@@ -4,6 +4,7 @@ Site.config(function ($routeProvider) {
 	$routeProvider
 	.when('/main', {templateUrl: 'main.html', controller: 'RouteController'})
 	.when('/tree', {templateUrl: 'tree.html', controller: 'RouteController'})
+	.when('/commit', {templateUrl: 'commit.html', controller: 'RouteController'})
 	.otherwise({redirectTo: '/main'});
 });
 
@@ -22,7 +23,7 @@ function AppController ($scope, $rootScope, $http) {
 function RouteController ($scope, $rootScope, $routeParams) {
 	// Getting the slug from $routeParams
 	var slug = $routeParams.slug;
-	
+
 	$scope.$emit('routeLoaded', {slug: slug});
 	//$scope.page = $rootScope.pages[slug];
 }

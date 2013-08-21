@@ -17,39 +17,37 @@
 					</div>
 				</div>
 			</form>
-			
-			<div id="view"></div>
-	
-			<table class="table">
-				<tr class="hide" id="parent">
-					<td><a ng-click="go('parent')">..</a></td>
-				</tr>
-				<tr ng-repeat="tree in trees">
-					<td><a ng-click="go(tree)">{{tree.path}}</a></td>
-				</tr>
-			</table>
 
-			<pre class="prettyprint" style="width: 100%;"><code id="content"></code></pre>
+			<ul class="media-list">
+				<li class="media" ng-repeat="commit in commits">
+					<a class="pull-left">
+						<img class="img-rounded" src="{{commit.committer.avatar_url}}" style="width:50px;height:50px;"/>
+					</a>
+					<div class="media-body">
+						<h4 class="media-heading"><a href="go({{commit}})">{{commit.commit.message}}</a></h4>
+						<span class="label">{{commit.committer && commit.committer.login || commit.commit.committer.name}}</span>
+						<span class="label">{{commit.commit.committer.date| date:'yyyy.MM.dd.'}}</span>
+						{{commit}}
+					</div>
+				</li>
+			</ul>
 		</div>
 		<div class="col-lg-6 col-lg-4">
 		</div>
 	</div> <!-- /container -->
-	
 	<script type="text/javascript">
 	function commitCtrl($scope, $http) {
 		if ($('#owner').val() == "") $('#owner').val('D2festTeams');
 		if ($('#repo').val() == "") $('#repo').val('hirrit');
 
 		$scope.search = function() {
-			$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/refs').success(function(data) {
-				$.each(data, function(idx, e) {
-					if (e.ref == 'refs/heads/master') {
-						$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/commits/' + e.object.sha).success(function(data) {
-							console.log(data);
-						});  
-					}
-				});
+			$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/commits').success(function(data) {
+				$scope.commits = data;
 			});
+		};
+
+		$scope.go = function(commit){
+
 		};
 /*
 		$scope.parent = {};
@@ -59,8 +57,8 @@
 				$scope.trees = $scope.parent;
 			} else if (tree.type == "blob") {
 				$http({
-					url: 'https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/blobs/' + tree.sha, 
-					method: 'GET', 
+					url: 'https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/git/blobs/' + tree.sha,
+					method: 'GET',
 						headers: {'Accept': 'application/vnd.github.VERSION.raw' }
 					}).success(function(data) {
 						$('#content').text(data);
