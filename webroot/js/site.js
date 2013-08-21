@@ -20,9 +20,9 @@ function AppController ($scope, $rootScope, $http) {
 	});
 }
 
-function RouteController ($scope, $rootScope, $routeParams) {
+function RouteController ($scope, $route) {
 	// Getting the slug from $routeParams
-	var slug = $routeParams.slug;
+	var slug = $route.current.templateUrl.replace('.html','');
 
 	$scope.$emit('routeLoaded', {slug: slug});
 	//$scope.page = $rootScope.pages[slug];
