@@ -7,10 +7,10 @@
 				<div class="form-group">
 					<label for="repo" class="col-lg-2 control-label">Github</label>
 					<div class="col-lg-4">
-						<input type="text" class="form-control" id="owner" placeholder="Username" />
+						<input type="text" class="form-control" ng-model="owner" placeholder="Username" />
 					</div>
 					<div class="col-lg-4">
-						<input type="text" class="form-control" id="repo" placeholder="Repository" />
+						<input type="text" class="form-control" ng-model="repo" placeholder="Repository" />
 					</div>
 					<div class="col-lg-2">
 						<button class="btn btn-primary" ng-click="search()">search</button>
@@ -18,16 +18,18 @@
 				</div>
 			</form>
 
+			<h2>commit count : <span>{{commitCount}}</span></h2>
+
 			<ul class="media-list">
 				<li class="media" ng-repeat="commit in commits">
 					<a class="pull-left">
 						<img class="img-rounded" src="{{commit.committer.avatar_url}}" style="width:50px;height:50px;"/>
 					</a>
 					<div class="media-body">
-						<h4 class="media-heading"><a href="go({{commit}})">{{commit.commit.message}}</a></h4>
+						<h4 class="media-heading"><a href="#" ng-click="commit({{commit}})">{{commit.commit.message}}</a></h4>
 						<span class="label">{{commit.committer && commit.committer.login || commit.commit.committer.name}}</span>
-						<span class="label">{{commit.commit.committer.date| date:'yyyy.MM.dd.'}}</span>
-						{{commit}}
+						<span class="label">{{commit.commit.committer.date| date:'yyyy.MM.dd. HH:mm:ss'}}</span>
+						<span class="label">sha : {{ commit.sha | limitTo:3 }}</span>
 					</div>
 				</li>
 			</ul>
@@ -37,16 +39,37 @@
 	</div> <!-- /container -->
 	<script type="text/javascript">
 	function commitCtrl($scope, $http) {
-		if ($('#owner').val() == "") $('#owner').val('D2festTeams');
-		if ($('#repo').val() == "") $('#repo').val('hirrit');
+		$scope.commitCount = $scope.commitCount || 0;
+		$scope.owner = $scope.owner || "D2festTeams";
+		$scope.repo = $scope.repo || "hirrit";
 
 		$scope.search = function() {
-			$http.get('https://api.github.com/repos/'+$('#owner').val()+'/'+$('#repo').val()+'/commits').success(function(data) {
+			var param = {":owner":$scope.owner, ":repo":$scope.repo};
+
+			var commits_list_url = github.uri("commits_list", param);
+			$http.get(commits_list_url).success(function(data){
 				$scope.commits = data;
+				$scope.commitCount = data.length;
 			});
+
+/*	수치가 맞지 않음 정확한 이유 확인 않됨.
+			var commits_info_url = github.uri("commits_info", param);
+			$http.get(commits_info_url).success(function(data){
+				var cnt = 0;
+				$.each(data,function(i,item){
+					cnt += item.total;
+				});
+				$scope.commitCount = cnt;
+			});
+*/
 		};
 
-		$scope.go = function(commit){
+		$scope.commit = function(commit){
+
+		};
+
+		$scope.xx = function(sha){
+
 
 		};
 /*

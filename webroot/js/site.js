@@ -1,3 +1,29 @@
+// github api
+;(function(){
+var github = {
+	domain : "https://api.github.com",
+	api : {
+		repos_get : "/repos/:owner/:repo",
+		commits_info : "/repos/:owner/:repo/stats/commit_activity",
+		commits_list : "/repos/:owner/:repo/commits",
+		commits_view : "/repos/:owner/:repo/commits/:sha"
+	},
+	add : function(name, path){
+		this.api[name] = path; return this;
+	},
+	uri : function(apiname, param, domain) {
+		domain = domain || this.domain;
+		var path = this.api[apiname];
+		if(path == null || path == "") return null;
+		$.map(param,function(value,key){ path = path.replace(key,value); });
+		return domain + path;
+	}
+};
+
+this.github = github;
+
+})();
+
 var Site = angular.module('Site', []);
 
 Site.config(function ($routeProvider) {
